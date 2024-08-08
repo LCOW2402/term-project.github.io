@@ -1,3 +1,6 @@
+// Define tax rate (e.g., 10% tax rate)
+const TAX_RATE = 0.10;
+
 document.addEventListener("DOMContentLoaded", function () {
     fetch('products.json')
         .then(response => response.json())
@@ -58,7 +61,17 @@ function updateCart() {
         cartItems.appendChild(cartItem);
         totalPrice += item.price * item.quantity;
     });
+
+    // Calculate tax and total with tax
+    const taxAmount = totalPrice * TAX_RATE;
+    const totalWithTax = totalPrice + taxAmount;
+
+    // Update the UI
     document.getElementById('total-price').textContent = totalPrice.toFixed(2);
+    document.getElementById('total-tax').textContent = taxAmount.toFixed(2);
+    document.getElementById('total-with-tax').textContent = totalWithTax.toFixed(2);
+
+    // Save cart to local storage
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
