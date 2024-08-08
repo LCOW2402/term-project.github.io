@@ -22,8 +22,9 @@ document.addEventListener("DOMContentLoaded", function () {
         updateCart();
     }
 
-    // Add event listener for the "Clear Cart" button
+    // Add event listeners for buttons
     document.getElementById('clear-cart').addEventListener('click', clearCart);
+    document.getElementById('checkout').addEventListener('click', checkout);
 });
 
 let cart = [];
@@ -76,4 +77,17 @@ function clearCart() {
     cart = [];
     updateCart();
     localStorage.removeItem('cart'); // Clear cart from local storage
+}
+
+function checkout() {
+    if (cart.length === 0) {
+        alert("Your cart is empty. Add items to the cart before checking out.");
+        return;
+    }
+
+    // Clear cart and update UI
+    clearCart();
+
+    // Display success message
+    alert("Thank you for your purchase! Your order has been placed successfully.");
 }
