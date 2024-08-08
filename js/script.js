@@ -15,11 +15,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 productList.appendChild(productDiv);
             });
         });
+
+    // Load cart from local storage
+    if (localStorage.getItem('cart')) {
+        cart = JSON.parse(localStorage.getItem('cart'));
+        updateCart();
+    }
+
+    // Add event listener for the "Clear Cart" button
+    document.getElementById('clear-cart').addEventListener('click', clearCart);
 });
 
 let cart = [];
 function addToCart(id, name, price, image) {
-    const cartItems = document.getElementById('cart-items');
     const existingItem = cart.find(item => item.id === id);
     if (existingItem) {
         existingItem.quantity++;
@@ -40,7 +48,11 @@ function updateCart() {
             <img src="${item.image}" alt="${item.name}" class="cart-item-image">
             <h4>${item.name}</h4>
             <p>Price: $${item.price.toFixed(2)}</p>
-            <p>Quantity: ${item.quantity}</p>
+            <div class="cart-item-controls">
+                <button onclick="changeQuantity(${item.id}, -1)">-</button>
+                <span>${item.quantity}</span>
+                <button onclick="changeQuantity(${item.id}, 1)">+</button>
+            </div>
         `;
         cartItems.appendChild(cartItem);
         totalPrice += item.price * item.quantity;
@@ -49,9 +61,19 @@ function updateCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    if (localStorage.getItem('cart')) {
-        cart = JSON.parse(localStorage.getItem('cart'));
+function changeQuantity(id, delta) {
+    const item = cart.find(item => item.id === id);
+    if (item) {
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+            cart = cart.filter(item => item.id !== id);
+        }
         updateCart();
     }
-});
+}
+
+function clearCart() {
+    cart = [];
+    updateCart();
+    localStorage.removeItem('cart'); // Clear cart from local storage
+}
