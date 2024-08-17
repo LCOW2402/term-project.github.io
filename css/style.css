@@ -32,6 +32,11 @@ section {
     padding: 2rem;
 }
 
+#products-description {
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #555;
+}
 
 /* Product List Styles */
 #product-list {
